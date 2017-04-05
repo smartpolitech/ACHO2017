@@ -1,0 +1,12 @@
+import "/robocomp/interfaces/IDSLs/Persiana.idsl";
+
+Component Persiana
+{
+	Communications
+	{
+		implements Persiana;
+		
+	};
+	language Python;
+};
+

@@ -1,9 +1,0 @@
-module RoboCompPersiana
-{
-	interface Persiana
-	{
-	void subir();
-	void bajar();
-	void parar();
-	};
-};

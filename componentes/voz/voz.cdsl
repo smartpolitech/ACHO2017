@@ -1,0 +1,11 @@
+import "/home/smartpolitech/robocomp/interfaces/IDSLs/Persiana.idsl";
+
+Component voz
+{
+	Communications
+	{
+		requires Persiana;	
+	};
+	language Python;
+};
+

@@ -232,6 +232,7 @@ class HotwordDetector(object):
                 		#os.system("play dime.wav")
                 play_audio_file_idu(DETECT_IDU)
        		#play_sound("bajando persiana poco")
+        		#play_sound("Lo siento, no te entiendo")
                 sample_width, data = self.record()
                 data = pack('<' + ('h' * len(data)), *data)
 
@@ -377,4 +378,3 @@ class HotwordDetector(object):
         data_all = self.trim(data_all)  # we trim before normalize as threshhold applies to un-normalized wave (as well as is_silent() function)
         data_all = self.normalize(data_all)
         return sample_width, data_all
-

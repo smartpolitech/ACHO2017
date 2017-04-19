@@ -34,8 +34,13 @@ RESOURCE_FILE = os.path.join(TOP_DIR, "resources/common.res")
 DETECT_DING = os.path.join(TOP_DIR, "resources/ding.wav")
 DETECT_DONG = os.path.join(TOP_DIR, "resources/dong.wav")
 DETECT_IDU = os.path.join(TOP_DIR, "dime.wav")
+PREGUNTA_PERSIANA = os.path.join(TOP_DIR, "pregunta_persiana.wav")
 SUBE_PERSIANA = os.path.join(TOP_DIR, "sube_persiana.wav")
+SUBE_PERSIANA_POCO = os.path.join(TOP_DIR, "sube_persiana_poco.wav")
+SUBE_PERSIANA_MITAD = os.path.join(TOP_DIR, "sube_persiana_mitad.wav")
 BAJA_PERSIANA = os.path.join(TOP_DIR, "baja_persiana.wav")
+BAJA_PERSIANA_POCO = os.path.join(TOP_DIR, "baja_persiana_poco.wav")
+BAJA_PERSIANA_MITAD = os.path.join(TOP_DIR, "baja_persiana_mitad.wav")
 PARA_PERSIANA = os.path.join(TOP_DIR, "para_persiana.wav")
 ERROR = os.path.join(TOP_DIR, "error.wav")
 
@@ -68,20 +73,19 @@ class RingBuffer(object):
         return tmp
 
 def play_sound(msg):
-   tts = gTTS(text=msg, lang='es')
-   tts.save("prueba.mp3")
-   song = AudioSegment.from_mp3("prueba.mp3")
-   song.export("final.wav", format ="wav")
-   os.system("aplay final.wav")
+    tts = gTTS(text=msg, lang='es')
+    tts.save("prueba.mp3")
+    song = AudioSegment.from_mp3("prueba.mp3")
+    song.export("final.wav", format ="wav")
+    os.system("aplay final.wav")
 
 
 def play_audio_file_idu(fname):
     """Simple callback function to play a wave file. By default it plays
     a Ding sound.
-
     :param str fname: wave file name
     :return: None
-    """
+        """
     ding_wav = wave.open(fname, 'rb')
     ding_data = ding_wav.readframes(ding_wav.getnframes())
     audio = pyaudio.PyAudio()
@@ -99,7 +103,6 @@ def play_audio_file_idu(fname):
 def play_audio_file(fname=DETECT_DING):
     """Simple callback function to play a wave file. By default it plays
     a Ding sound.
-
     :param str fname: wave file name
     :return: None
     """
@@ -121,7 +124,6 @@ class HotwordDetector(object):
     """
     Snowboy decoder to detect whether a keyword specified by `decoder_model`
     exists in a microphone input stream.
-
     :param decoder_model: decoder model file path, a string or a list of strings
     :param resource: resource file path.
     :param sensitivity: decoder sensitivity, a float of a list of floats.
@@ -131,9 +133,9 @@ class HotwordDetector(object):
     :param audio_gain: multiply input volume by this factor.
     """
     def __init__(self, decoder_model,
-                 resource=RESOURCE_FILE,
-                 sensitivity= [],
-                 audio_gain=1):
+       resource=RESOURCE_FILE,
+       sensitivity= [],
+       audio_gain=1):
 
         def audio_callback(in_data, frame_count, time_info, status):
             self.ring_buffer.extend(in_data)
@@ -157,8 +159,8 @@ class HotwordDetector(object):
             sensitivity = sensitivity*self.num_hotwords
         if len(sensitivity) != 0:
             assert self.num_hotwords == len(sensitivity), \
-                "number of hotwords in decoder_model (%d) and sensitivity " \
-                "(%d) does not match" % (self.num_hotwords, len(sensitivity))
+            "number of hotwords in decoder_model (%d) and sensitivity " \
+            "(%d) does not match" % (self.num_hotwords, len(sensitivity))
         sensitivity_str = ",".join([str(t) for t in sensitivity])
         if len(sensitivity) != 0:
             self.detector.SetSensitivity(sensitivity_str.encode())
@@ -170,15 +172,15 @@ class HotwordDetector(object):
             input=True, output=False,
             format=self.audio.get_format_from_width(
                 self.detector.BitsPerSample() / 8),
-            channels=self.detector.NumChannels(),
-            rate=self.detector.SampleRate(),
-            frames_per_buffer=2048,
-            stream_callback=audio_callback)
+        channels=self.detector.NumChannels(),
+        rate=self.detector.SampleRate(),
+        frames_per_buffer=2048,
+        stream_callback=audio_callback)
 
 
     def start(self, detected_callback=play_audio_file,
-              interrupt_check=lambda: False,
-              sleep_time=0.03):
+      interrupt_check=lambda: False,
+      sleep_time=0.03):
         """
         Start the voice detector. For every `sleep_time` second it checks the
         audio buffer for triggering keywords. If detected, then call
@@ -186,7 +188,6 @@ class HotwordDetector(object):
         function (single model) or a list of callback functions (multiple
         models). Every loop it also calls `interrupt_check` -- if it returns
         True, then breaks from the loop and return.
-
         :param detected_callback: a function or list of functions. The number of
                                   items must match the number of models in
                                   `decoder_model`.
@@ -225,74 +226,78 @@ class HotwordDetector(object):
                 logger.warning("Error initializing streams or reading audio data")
             elif ans > 0:
                 message = "Keyword " + str(ans) + " detected at time: "
-                message += time.strftime("%Y-%m-%d %H:%M:%S",
-                                         time.localtime(time.time()))
-
-		logger.info(message)
-
-		#os.system("play dime.wav")
-                play_audio_file_idu(DETECT_IDU)
-		#play_sound("Lo siento, no te entiendo")
-		"Records from the microphone and outputs the resulting data to 'path'"
-       		sample_width, data = self.record()
-        	data = pack('<' + ('h' * len(data)), *data)
-
-        	wave_file = wave.open('demo.wav', 'wb')
-        	wave_file.setnchannels(CHANNELS)
-        	wave_file.setsampwidth(sample_width)
-        	wave_file.setframerate(RATE)
-        	wave_file.writeframes(data)
-        	wave_file.close()
-
-                message = "Mensaje recibido! "
-                message += time.strftime("%Y-%m-%d %H:%M:%S",
-                                         time.localtime(time.time()))
+                message += time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
                 logger.info(message)
 
-		# Record Audio
-		r = sr.Recognizer()
-		with sr.AudioFile(AUDIO_FILE) as source:
-		 #   print("Say something!")
-		    audio = r.record(source)
- 
-		# Speech recognition using Google Speech Recognition
-		try:
-		    # for testing purposes, we're just using the default API key
-		    # to use another API key, use `r.recognize_google(audio, key="GOOGLE_SPEECH_RECOGNITION_API_KEY")`
-		    # instead of `r.recognize_google(audio)`
-                    msg = r.recognize_google(audio, language="es-ES")
-		    print("You said: " + msg)
-                    msg = msg.split( )
-                    if "baja" in msg and "persiana" in msg:
-                        play_audio_file_idu(BAJA_PERSIANA)
-			 #play_sound("Bajando la persiana")
-			call(["curl", "http://root:opticalflow@192.168.0.101/arduino/command/blinddown"])
-			#call(["curl", "http://root:opticalflow@192.168.0.102/acho/lights/on/all"])
+                		#os.system("play dime.wav")
+                play_audio_file_idu(DETECT_IDU)
+       		#play_sound("bajando persiana poco")
+                sample_width, data = self.record()
+                data = pack('<' + ('h' * len(data)), *data)
 
+                wave_file = wave.open('demo.wav', 'wb')
+                wave_file.setnchannels(CHANNELS)
+                wave_file.setsampwidth(sample_width)
+                wave_file.setframerate(RATE)
+                wave_file.writeframes(data)
+                wave_file.close()
+
+                message = "Mensaje recibido! "
+                message += time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
+                logger.info(message)
+            	# Record Audio
+                r = sr.Recognizer()
+                with sr.AudioFile(AUDIO_FILE) as source:
+            	    #print("Say something!")
+                    audio = r.record(source)
+                try:
+        		    # for testing purposes, we're just using the default API key
+        		    # to use another API key, use `r.recognize_google(audio, key="GOOGLE_SPEECH_RECOGNITION_API_KEY")`
+        		    # instead of `r.recognize_google(audio)`
+                    msg = r.recognize_google(audio, language="es-ES")
+                    print("You said: " + msg)
+                    msg = msg.split( )
 
                     if "sube" in msg and "persiana" in msg:
-			play_audio_file_idu(SUBE_PERSIANA)
-                        #play_sound("Subiendo la persiana")
 			call(["curl", "http://root:opticalflow@192.168.0.101/arduino/command/blindup"])
-
-		    if "para" in msg:
-			play_audio_file_idu(PARA_PERSIANA)
-                        #play_sound("Parando la persiana")
-			call(["curl", "http://root:opticalflow@192.168.0.101/arduino/command/blindstop"])
-
-		    if "hora" in msg and "es" in msg:
-			ahora = time.strftime("%X")
-			play_sound(ahora)
-
-		except sr.UnknownValueError:
-		    play_audio_file_idu(ERROR)
-		except sr.RequestError as e:
-		    print("Could not request results from Google Speech Recognition service; {0}".format(e))
+                        if "poco" in msg:
+                            play_audio_file_idu(SUBE_PERSIANA_POCO)
+                            time.sleep(5)
+                            call(["curl", "http://root:opticalflow@192.168.0.101/arduino/command/blindstop"])
+			#cambiar por else if
+                        if "mitad" in msg:
+                            play_audio_file_idu(SUBE_PERSIANA_MITAD)
+                            time.sleep(10)
+                            call(["curl", "http://root:opticalflow@192.168.0.101/arduino/command/blindstop"])
+			else:
+			    play_audio_file_idu(SUBE_PERSIANA)
 
 
-        #        callback = detected_callback[ans-1]	
-         #       if callback is not None:
-          #          callback()
+                    if "baja" in msg and "persiana" in msg:
+                        call(["curl", "http://root:opticalflow@192.168.0.101/arduino/command/blinddown"])
+                        if "poco" in msg:
+                            play_audio_file_idu(BAJA_PERSIANA_POCO)
+                            time.sleep(5)
+                            call(["curl", "http://root:opticalflow@192.168.0.101/arduino/command/blindstop"])
+
+                        if "mitad" in msg:
+                            play_audio_file_idu(BAJA_PERSIANA_MITAD)
+                            time.sleep(10)
+                            call(["curl", "http://root:opticalflow@192.168.0.101/arduino/command/blindstop"])
+
+                    if "hora" in msg and "es" in msg:
+                        ahora = time.strftime("%X")
+                        play_sound(ahora)
+
+                except sr.UnknownValueError:
+                    play_audio_file_idu(ERROR)
+                except sr.RequestError as e:
+                    print("Could not request results from Google Speech Recognition service; {0}".format(e))
+
+
+                        #        callback = detected_callback[ans-1]	
+                         #       if callback is not None:
+                          #          callback()
 
         logger.debug("finished.")
 
@@ -313,7 +318,7 @@ class HotwordDetector(object):
         """Amplify the volume out to max -1dB"""
         # MAXIMUM = 16384
         normalize_factor = (float(NORMALIZE_MINUS_ONE_dB * FRAME_MAX_VALUE)
-                            / max(abs(i) for i in data_all))
+            / max(abs(i) for i in data_all))
 
         r = array('h')
         for i in data_all:
@@ -364,7 +369,6 @@ class HotwordDetector(object):
                     silent_chunks = 0
             elif not silent:
                 audio_started = True              
-    
         sample_width = p.get_sample_size(FORMAT)
         stream.stop_stream()
         stream.close()

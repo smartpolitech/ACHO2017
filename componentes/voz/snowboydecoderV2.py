@@ -34,6 +34,7 @@ RESOURCE_FILE = os.path.join(TOP_DIR, "resources/common.res")
 DETECT_DING = os.path.join(TOP_DIR, "resources/ding.wav")
 DETECT_DONG = os.path.join(TOP_DIR, "resources/dong.wav")
 DETECT_IDU = os.path.join(TOP_DIR, "dime.wav")
+PREGUNTA_PERSIANA = os.path.join(TOP_DIR, "pregunta_persiana.wav")
 SUBE_PERSIANA = os.path.join(TOP_DIR, "sube_persiana.wav")
 BAJA_PERSIANA = os.path.join(TOP_DIR, "baja_persiana.wav")
 PARA_PERSIANA = os.path.join(TOP_DIR, "para_persiana.wav")
@@ -78,7 +79,6 @@ def play_sound(msg):
 def play_audio_file_idu(fname):
     """Simple callback function to play a wave file. By default it plays
     a Ding sound.
-
     :param str fname: wave file name
     :return: None
     """
@@ -99,7 +99,6 @@ def play_audio_file_idu(fname):
 def play_audio_file(fname=DETECT_DING):
     """Simple callback function to play a wave file. By default it plays
     a Ding sound.
-
     :param str fname: wave file name
     :return: None
     """
@@ -121,7 +120,6 @@ class HotwordDetector(object):
     """
     Snowboy decoder to detect whether a keyword specified by `decoder_model`
     exists in a microphone input stream.
-
     :param decoder_model: decoder model file path, a string or a list of strings
     :param resource: resource file path.
     :param sensitivity: decoder sensitivity, a float of a list of floats.
@@ -186,7 +184,6 @@ class HotwordDetector(object):
         function (single model) or a list of callback functions (multiple
         models). Every loop it also calls `interrupt_check` -- if it returns
         True, then breaks from the loop and return.
-
         :param detected_callback: a function or list of functions. The number of
                                   items must match the number of models in
                                   `decoder_model`.
@@ -231,7 +228,7 @@ class HotwordDetector(object):
 		logger.info(message)
 
 		#os.system("play dime.wav")
-                play_audio_file_idu(DETECT_IDU)
+            play_audio_file_idu(DETECT_IDU)
 		#play_sound("Lo siento, no te entiendo")
 		"Records from the microphone and outputs the resulting data to 'path'"
        		sample_width, data = self.record()
@@ -260,29 +257,99 @@ class HotwordDetector(object):
 		    # for testing purposes, we're just using the default API key
 		    # to use another API key, use `r.recognize_google(audio, key="GOOGLE_SPEECH_RECOGNITION_API_KEY")`
 		    # instead of `r.recognize_google(audio)`
+            msg = r.recognize_google(audio, language="es-ES")
+            print("You said: " + msg)
+            msg = msg.split( )
+
+            if "sube" in msg and "persiana" in msg:
+                play_audio_file_idu(PREGUNTA_PERSIANA)
+                sample_width, data = self.record()
+                data = pack('<' + ('h' * len(data)), *data)
+
+                wave_file = wave.open('demo.wav', 'wb')
+                wave_file.setnchannels(CHANNELS)
+                wave_file.setsampwidth(sample_width)
+                wave_file.setframerate(RATE)
+                wave_file.writeframes(data)
+                wave_file.close()
+
+                # Record Audio
+                r = sr.Recognizer()
+                with sr.AudioFile(AUDIO_FILE) as source:
+                audio = r.record(source)
+
+                try:
                     msg = r.recognize_google(audio, language="es-ES")
-		    print("You said: " + msg)
+                    print("You said: " + msg)
                     msg = msg.split( )
-                    if "baja" in msg and "persiana" in msg:
+
+                    if "poco" in msg:
+                        play_audio_file_idu(SUBE_PERSIANA)
+                        call(["curl", "http://root:opticalflow@192.168.0.101/arduino/command/blindup"])
+                        time.sleep(5)
+                        call(["curl", "http://root:opticalflow@192.168.0.101/arduino/command/blindstop"])
+
+                    if "toda" in msg or "todo" in msg:
+                        play_audio_file_idu(SUBE_PERSIANA)
+                        call(["curl", "http://root:opticalflow@192.168.0.101/arduino/command/blindup"])
+
+                    if "mitad" in msg:
+                        play_audio_file_idu(SUBE_PERSIANA)
+                        call(["curl", "http://root:opticalflow@192.168.0.101/arduino/command/blindup"])
+                        time.sleep(10)
+                        call(["curl", "http://root:opticalflow@192.168.0.101/arduino/command/blindstop"])
+                except sr.UnknownValueError:
+                    play_audio_file_idu(ERROR)
+                except sr.RequestError as e:
+                    print("Could not request results from Google Speech Recognition service; {0}".format(e))
+
+
+            if "baja" in msg and "persiana" in msg:
+                play_audio_file_idu(PREGUNTA_PERSIANA)
+                sample_width, data = self.record()
+                data = pack('<' + ('h' * len(data)), *data)
+
+                wave_file = wave.open('demo.wav', 'wb')
+                wave_file.setnchannels(CHANNELS)
+                wave_file.setsampwidth(sample_width)
+                wave_file.setframerate(RATE)
+                wave_file.writeframes(data)
+                wave_file.close()
+
+                # Record Audio
+                r = sr.Recognizer()
+                with sr.AudioFile(AUDIO_FILE) as source:
+                audio = r.record(source)
+
+                try:
+                    msg = r.recognize_google(audio, language="es-ES")
+                    print("You said: " + msg)
+                    msg = msg.split( )
+
+                    if "poco" in msg:
                         play_audio_file_idu(BAJA_PERSIANA)
-			 #play_sound("Bajando la persiana")
-			call(["curl", "http://root:opticalflow@192.168.0.101/arduino/command/blinddown"])
-			#call(["curl", "http://root:opticalflow@192.168.0.102/acho/lights/on/all"])
+                        call(["curl", "http://root:opticalflow@192.168.0.101/arduino/command/blinddown"])
+                        time.sleep(5)
+                        call(["curl", "http://root:opticalflow@192.168.0.101/arduino/command/blindstop"])
 
+                    if "toda" in msg or "todo" in msg:
+                        play_audio_file_idu(BAJA_PERSIANA)
+                        call(["curl", "http://root:opticalflow@192.168.0.101/arduino/command/blinddown"])
 
-                    if "sube" in msg and "persiana" in msg:
-			play_audio_file_idu(SUBE_PERSIANA)
-                        #play_sound("Subiendo la persiana")
-			call(["curl", "http://root:opticalflow@192.168.0.101/arduino/command/blindup"])
+                    if "mitad" in msg:
+                        play_audio_file_idu(BAJA_PERSIANA)
+                        call(["curl", "http://root:opticalflow@192.168.0.101/arduino/command/blinddown"])
+                        time.sleep(10)
+                        call(["curl", "http://root:opticalflow@192.168.0.101/arduino/command/blindstop"])
 
-		    if "para" in msg:
-			play_audio_file_idu(PARA_PERSIANA)
-                        #play_sound("Parando la persiana")
-			call(["curl", "http://root:opticalflow@192.168.0.101/arduino/command/blindstop"])
+                except sr.UnknownValueError:
+                    play_audio_file_idu(ERROR)
+                except sr.RequestError as e:
+                    print("Could not request results from Google Speech Recognition service; {0}".format(e))
 
 		    if "hora" in msg and "es" in msg:
-			ahora = time.strftime("%X")
-			play_sound(ahora)
+			    ahora = time.strftime("%X")
+			    play_sound(ahora)    
 
 		except sr.UnknownValueError:
 		    play_audio_file_idu(ERROR)
@@ -373,4 +440,3 @@ class HotwordDetector(object):
         data_all = self.trim(data_all)  # we trim before normalize as threshhold applies to un-normalized wave (as well as is_silent() function)
         data_all = self.normalize(data_all)
         return sample_width, data_all
-

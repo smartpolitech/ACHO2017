@@ -1,5 +1,5 @@
-# Endpoints for implemented interfaces
-Habla.Endpoints=tcp -p 11000
+# Proxies for required interfaces
+HablaProxy = habla:tcp -h localhost -p 0
 
 
 

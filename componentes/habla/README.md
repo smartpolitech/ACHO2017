@@ -38,7 +38,7 @@ After editing the new config file we can run the component:
 
 Habla count with different functions 
 
-&nbsp;&nbsp;**- readDic()**: open the file "dicc.txt". This file has the list of commands that ACHO can execute. The structure of the commands must be: 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**- readDic()**: open the file "dicc.txt". This file has the list of commands that ACHO can execute. The structure of the commands must be: 
 
 VERB:AGENT,AGENT,AGENT,...
    

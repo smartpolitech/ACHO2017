@@ -38,15 +38,15 @@ After editing the new config file we can run the component:
 
 Habla count with different functions 
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;**readDic()**: Open the file "dicc.txt". This file has the list of commands that ACHO can execute. The structure of the commands must be: 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;**readDic()**:&nbsp;&nbsp;Open the file "dicc.txt". This file has the list of commands that ACHO can execute. The structure of the commands must be: 
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VERB:AGENT,AGENT,AGENT,...
    
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VERB:AGENT,AGENT,AGENT,...
 
-Note: is important not to have blank spaces between chraracters.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Note: is important not to have blank spaces between chraracters.
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;**traduccion(message)**: Traduce the command given -from any language- to English. If the traduction is not posible, the component will stop its execution here and ask for another command.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;**traduccion(message)**:&nbsp;&nbsp;Traduce the command given -from any language- to English. If the traduction is not posible, the component will stop its execution here and ask for another command.
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(For more information refer to: [TextBlobErrors](http://textblob.readthedocs.io/en/dev/_modules/textblob/exceptions.html))
 

@@ -1,0 +1,7 @@
+module RoboCompLuces{
+	interface Luces
+	{
+		void encender();
+		void apagar();
+	};
+};

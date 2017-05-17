@@ -1,2 +1,0 @@
-/home/atenas/robocomp/components/ACHO2017/componentes/hablacliente/CMakeFiles/edit_cache.dir
-/home/atenas/robocomp/components/ACHO2017/componentes/hablacliente/CMakeFiles/rebuild_cache.dir

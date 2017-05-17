@@ -1,0 +1,11 @@
+import "/robocomp/interfaces/IDSLs/Luces.idsl";
+
+Component Luces
+{
+	Communications
+	{
+		implements Luces;
+	};
+	language Python;
+};
+

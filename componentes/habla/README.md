@@ -40,13 +40,15 @@ Habla count with different functions
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;**readDic()**: open the file "dicc.txt". This file has the list of commands that ACHO can execute. The structure of the commands must be: 
 
-VERB:AGENT,AGENT,AGENT,...
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VERB:AGENT,AGENT,AGENT,...
    
-VERB:AGENT,AGENT,AGENT,...
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VERB:AGENT,AGENT,AGENT,...
 
 Note: is important not to have blank spaces between chraracters.
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;**traduccion(message)**: traduce the command given -from any language- to English. If the traduction throws an error (For more information refer to: [TextBlobErrors](http://textblob.readthedocs.io/en/dev/_modules/textblob/exceptions.html))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;**traduccion(message)**: traduce the command given -from any language- to English. If the traduction throws an error 
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(For more information refer to: [TextBlobErrors](http://textblob.readthedocs.io/en/dev/_modules/textblob/exceptions.html))
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;**srl(sen_dest)**: 
 

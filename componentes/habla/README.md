@@ -44,7 +44,7 @@ Note: is important not to have blank spaces between chraracters.
 
 ** - traduccion(message)**: traduce the command given -from any language- to English. If the traduction throws an error (For more information refer to: [TextBlobErrors](http://textblob.readthedocs.io/en/dev/_modules/textblob/exceptions.html))
 
-** - srl(sen_dest)**: 
+**srl(sen_dest)**: 
 
 
 

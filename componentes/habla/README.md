@@ -37,11 +37,14 @@ After editing the new config file we can run the component:
 ## Functions
 Habla count with different functions 
 
-**readDic():** open the file "dicc.txt". This file has the list of commands that ACHO can execute. The structure of the commands must be: 
+** - readDic()**: open the file "dicc.txt". This file has the list of commands that ACHO can execute. The structure of the commands must be: 
     VERB:AGENT,AGENT,AGENT,...
     VERB:AGENT,AGENT,AGENT,...
 Note: is important not to have blank spaces between chraracters.
-traduccion(message): traduces the command given to English. If the traduction throws an error (ref: http://textblob.readthedocs.io/en/dev/_modules/textblob/exceptions.html)
+
+** - traduccion(message)**: traduce the command given -from any language- to English. If the traduction throws an error (For more information refer to: [TextBlobErrors](http://textblob.readthedocs.io/en/dev/_modules/textblob/exceptions.html))
+
+** - srl(sen_dest)**: 
 
 
 
